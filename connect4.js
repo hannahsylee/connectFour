@@ -64,16 +64,40 @@ function makeHtmlBoard() {
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
 function findSpotForCol(x) {
+  // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
+  let htmlBoard = document.querySelector('#board');
+  console.log(htmlBoard);
   // TODO: write the real version of this, rather than always returning 0
   // y -> number of rows
   // x -> number of columns
-  return 0;
+  for (let y = 5; y >= 0; y--){
+    const cell = document.getElementById(`${y}-${x}`)
+    const lastCell = document.getElementById(`0-${x}`)
+    // console.log(y);
+    // console.log(lastCell.value);
+    if (cell.value === undefined){
+      // console.log('True');
+      // console.log(y);
+      // console.log(x);
+      return y;
+    }
+    else if (lastCell.value !== undefined){
+      return null;
+    }
+  }
+  // return 0;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
+  const newDiv = document.createElement("div");
+  newDiv.className = 'piece';
+  newDiv.id = 'red'
+  let cell = document.getElementById(`${y}-${x}`);
+  cell.append(newDiv);
+  // console.log(cell);
 }
 
 /** endGame: announce game end */

@@ -11,7 +11,7 @@
 const WIDTH = 7;
 const HEIGHT = 6;
 
-var currPlayer = 1; // active player: 1 or 2
+let currPlayer = 1; // active player: 1 or 2
 
 const board = [];
 // var board = []; // array of rows, each row is array of cells  (board[y][x])
@@ -22,10 +22,13 @@ const board = [];
 
 function makeBoard() {
   // TODO: set "board" to empty HEIGHT x WIDTH matrix array
-  for (let i = 0; i < WIDTH; i++){
-    board[i] = [];
-    for (let j = 0; j < HEIGHT; j++){
-      board[i][j] = undefined;
+  for (let j = 0; j < HEIGHT; j++){
+    board[j] = [];
+
+    for (let i = 0; i < WIDTH; i++){
+    // board[i] = [];
+    // for (let j = 0; j < HEIGHT; j++){
+      board[j][i] = undefined;
     }
   } 
   return board;
@@ -66,7 +69,7 @@ function makeHtmlBoard() {
 function findSpotForCol(x) {
   // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
   let htmlBoard = document.querySelector('#board');
-  console.log(htmlBoard);
+  // console.log(htmlBoard);
   // TODO: write the real version of this, rather than always returning 0
   // y -> number of rows
   // x -> number of columns
@@ -75,13 +78,16 @@ function findSpotForCol(x) {
     const lastCell = document.getElementById(`0-${x}`)
     // console.log(y);
     // console.log(lastCell.value);
-    if (cell.value === undefined){
+
+    // if the cell doesn't have a <div> 
+    if (!cell.firstChild){
+      // console.log(cell.value);
       // console.log('True');
       // console.log(y);
       // console.log(x);
       return y;
     }
-    else if (lastCell.value !== undefined){
+    else if (lastCell.firstChild){
       return null;
     }
   }
@@ -94,7 +100,14 @@ function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
   const newDiv = document.createElement("div");
   newDiv.className = 'piece';
-  newDiv.id = 'red'
+  if (currPlayer === 1){
+    newDiv.id = 'firstPlayer';
+  } else {
+    newDiv.id = 'secondPlayer';
+  }
+  // newDiv.className = 'piece';
+  // newDiv.id = 'firstPlayer';
+
   let cell = document.getElementById(`${y}-${x}`);
   cell.append(newDiv);
   // console.log(cell);
@@ -104,6 +117,7 @@ function placeInTable(y, x) {
 
 function endGame(msg) {
   // TODO: pop up alert message
+  alert(msg);
 }
 
 /** handleClick: handle click of column top to play piece */
@@ -123,6 +137,11 @@ function handleClick(evt) {
   // TODO: add line to update in-memory board
   placeInTable(y, x);
 
+  board[y][x] = 'circle';
+  // console.log(board);
+
+
+
   // check for win
   if (checkForWin()) {
     return endGame(`Player ${currPlayer} won!`);
@@ -130,10 +149,42 @@ function handleClick(evt) {
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
+  if (checkForTie(board)){
+    return endGame ('No Winner');
+  }
 
   // switch players
   // TODO: switch currPlayer 1 <-> 2
+  if (currPlayer === 1){
+    currPlayer = 2;
+  } else {
+    currPlayer = 1;
+  }
+
 }
+
+function checkForTie(arr) {
+  for (let innerArray of arr){
+    return innerArray.every(function(value){
+      return value === 'circle';
+    })
+  }
+
+
+  // count = 0;
+  // for (let y = 0; y < HEIGHT; y++) {
+  //   for (let x = 0; x < WIDTH; x++) {
+  //     if (document.getElementById(`${y}-${x}`).firstChild){
+  //       count ++
+  //       if (count === 56){
+  //         return endGame(`No Winner`);
+  //       } 
+  //     } else {
+  //       return;
+  //     }
+  //   }
+  // }
+}  
 
 /** checkForWin: check board cell-by-cell for "does a win start here?" */
 

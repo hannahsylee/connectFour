@@ -14,6 +14,17 @@
   margin: 5px;
   width: 80%;
   height: 80%;
+  animation-name: slidedown;
+}
+
+@keyframes slidedown {
+  from {
+    transform: translateY(0%);
+  }
+
+  to {
+    transform: translateY(100%);
+  }
 }
 
 /* TODO: make pieces red/blue,  depending on player 1/2 piece */

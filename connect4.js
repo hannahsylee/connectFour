@@ -102,8 +102,10 @@ function placeInTable(y, x) {
   newDiv.className = 'piece';
   if (currPlayer === 1){
     newDiv.id = 'firstPlayer';
+    board[y][x] = currPlayer;
   } else {
     newDiv.id = 'secondPlayer';
+    board[y][x] = currPlayer;
   }
   // newDiv.className = 'piece';
   // newDiv.id = 'firstPlayer';
@@ -137,7 +139,6 @@ function handleClick(evt) {
   // TODO: add line to update in-memory board
   placeInTable(y, x);
 
-  board[y][x] = 'circle';
   // console.log(board);
 
 
@@ -166,7 +167,7 @@ function handleClick(evt) {
 function checkForTie(arr) {
   for (let innerArray of arr){
     return innerArray.every(function(value){
-      return value === 'circle';
+      return value !== undefined;
     })
   }
 
@@ -194,8 +195,11 @@ function checkForWin() {
     //  - cells: list of four (y, x) cells
     //  - returns true if all are legal coordinates & all match currPlayer
 
+    // QUESTION??
+
     return cells.every(
       ([y, x]) =>
+      // each comparison of the y or x is there incase the cell is outside of the board box size. 
         y >= 0 &&
         y < HEIGHT &&
         x >= 0 &&
@@ -205,13 +209,17 @@ function checkForWin() {
   }
 
   // TODO: read and understand this code. Add comments to help you.
+  // Let's make x = 0, y = 0;
 
-  for (var y = 0; y < HEIGHT; y++) {
-    for (var x = 0; x < WIDTH; x++) {
-      var horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
-      var vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
-      var diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
-      var diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let  x = 0; x < WIDTH; x++) {
+      // creating every horizontal pattern available 
+      const horiz = [[y, x], [y, x + 1], [y, x + 2], [y, x + 3]];
+      // creating every vertical pattern available 
+      const vert = [[y, x], [y + 1, x], [y + 2, x], [y + 3, x]];
+      // creating every diagonal pattern available 
+      const diagDR = [[y, x], [y + 1, x + 1], [y + 2, x + 2], [y + 3, x + 3]];
+      const diagDL = [[y, x], [y + 1, x - 1], [y + 2, x - 2], [y + 3, x - 3]];
 
       if (_win(horiz) || _win(vert) || _win(diagDR) || _win(diagDL)) {
         return true;
